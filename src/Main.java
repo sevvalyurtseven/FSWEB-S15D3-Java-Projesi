@@ -3,42 +3,61 @@ import com.workintech.entity.Employee;
 import java.util.*;
 
 public class Main {
+    private static Map<Integer, Employee> employeeMap;
+    private static List<Employee> duplicatedEmployees;
+
     public static void main(String[] args){
-        List<Employee> employeeList = new LinkedList<>();
+        List<Employee> employees = new ArrayList<>();
 
-        employeeList.add(new Employee(1, "Sevval", "Yurtseven"));
-        employeeList.add(new Employee(1, "Sevval", "Yurtseven"));
-        employeeList.add(new Employee(2, "Ozge", "Dogru"));
-        employeeList.add(new Employee(2, "Ozge", "Dogru"));
-        employeeList.add(new Employee(3, "Ebru", "Nilufer"));
-        employeeList.add(new Employee(3, "Ebru", "Nilufer"));
-        employeeList.add(new Employee(4, "Elif", "Bilge"));
-        employeeList.add(new Employee(5, "Sibel", "Keskin"));
+        employees.add(new Employee(1, "Sevval", "Yurtseven"));
+        employees.add(new Employee(1, "Sevval", "Yurtseven"));
+        employees.add(new Employee(2, "Ozge", "Dogru"));
+        employees.add(new Employee(2, "Ozge", "Dogru"));
+        employees.add(new Employee(3, "Ebru", "Nilufer"));
+        employees.add(new Employee(3, "Ebru", "Nilufer"));
+        employees.add(new Employee(4, "Elif", "Bilge"));
+        employees.add(new Employee(5, "Sibel", "Keskin"));
 
-        Map<Integer, Employee> employeeMap = new HashMap<>();
-        List<Employee> removedEmployees = new ArrayList<>();
+        System.out.println("Duplicates: " + findDuplicates(employees));
+        System.out.println("Uniques: " + findUniques(employees));
+        System.out.println("Without Duplicates: " + removeDuplicates(employees));
+    }
 
-        Iterator<Employee> iterator = employeeList.iterator();
+    public static List<Employee> findDuplicates(List<Employee> employees){
+        employeeMap = new HashMap<>();
+        duplicatedEmployees = new LinkedList<>();
 
-        while (iterator.hasNext()){
-            Employee employee = iterator.next();
-            if(checkEmployeeIsNull(employee)) continue;
-            if(employeeMap.containsKey(employee.getId())){
-                removedEmployees.add(employee);
-                iterator.remove();
-            }else{
+        for (Employee employee : employees) {
+            if (checkEmployeeIsNull(employee)) continue;
+            if (employeeMap.containsKey(employee.getId())) {
+                duplicatedEmployees.add(employee);
+            } else {
                 employeeMap.put(employee.getId(), employee);
             }
         }
-        System.out.println("Mevcut: ");
-        System.out.println(employeeList);
-        System.out.println("Tekiller: ");
-        System.out.println(employeeMap);
-        System.out.println("Silinenler: ");
-        System.out.println(removedEmployees);
-
-
+        return duplicatedEmployees;
     }
+
+    public static Map<Integer, Employee> findUniques(List<Employee> employees){
+        employeeMap = new HashMap<>();
+
+        for (Employee employee : employees) {
+            if (checkEmployeeIsNull(employee)) continue;
+            if (!employeeMap.containsKey(employee.getId())) {
+                employeeMap.put(employee.getId(), employee);
+            }
+        }
+        return employeeMap;
+    }
+
+    public static List<Employee> removeDuplicates(List<Employee> employees){
+       List<Employee> duplicates = findDuplicates(employees);
+       Map<Integer, Employee> uniques = findUniques(employees);
+       List<Employee> onlyUnique = new LinkedList<>(uniques.values());
+       onlyUnique.removeAll(duplicates);
+       return onlyUnique;
+    }
+
     private static boolean checkEmployeeIsNull(Employee employee){
         if(employee == null){
             System.out.println("Null data bulundu.");
@@ -46,4 +65,5 @@ public class Main {
         }
         return false;
     }
+
 }
