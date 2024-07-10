@@ -8,6 +8,17 @@ public class CounterSampleMain {
         String[] kelimeler = text.split("\\s+");
         Map<String,Integer> counter = new HashMap<>();
 
+       /* for(String kelime : kelimeler) {
+           String key = kelime.toLowerCase().replaceAll("[.,!?\"]", "");
+           if(counter.containsKey(key)) {
+               int sayac = counter.get(key);
+               counter.put(key, ++sayac);
+           } else {
+               counter.put(key, 1);
+           }
+       }
+        */
+
         for(String kelime : kelimeler){
             kelime = kelime.toLowerCase().replaceAll("[.,!?\"]", "");
             counter.put(kelime, counter.getOrDefault(kelime, 0) + 1);
